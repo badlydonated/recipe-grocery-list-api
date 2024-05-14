@@ -1,35 +1,24 @@
 const express = require('express')
 const app = express()
+const MongoClient = require('mongodb').MongoClient
 const PORT = process.env.PORT ||8000
-const recipes = {
-    'mexican rice':{    
-        'groceryItem1' : '1 cup rice',
-        'groceryItem2' : '1 bell pepper',
-        'groceryItem3' : '1/2 onion',
-        'groceryItem4' : '1 small can tomato puree',
-        'groceryItem5' : '2 cups chicken stock',
-        'groceryItem6' : '1 clove garlic'
-    },
-    'picadillo' :{
-        'groceryItem1' : '1lb ground beef',
-        'groceryItem2' : '1 bell pepper',
-        'groceryItem3' : '1/2 onion',
-        'groceryItem4' : '1 small can tomato puree',
-        'groceryItem5' : '2 cups chicken stock',
-        'groceryItem6' : '1 clove garlic'
-    },
-    'shephard\'s pie' :{
-        'groceryItem1' : '1 cup rice',
-        'groceryItem2' : '1 bell pepper',
-        'groceryItem3' : '1/2 onion',
-        'groceryItem4' : '1 small can tomato puree',
-        'groceryItem5' : '2 cups chicken stock',
-        'groceryItem6' : '1 clove garlic'
-    },
-    'unknown' :{
-        'groceryItem' : 'no such recipe'
-    }
-}
+require('dotenv').config()
+
+let db,
+    dbConnectionStr = process.env.DB_STRING,
+    dbName = 'recipe-api'
+
+MongoClient.connect(dbConnectionStr, { useUnifiedTopology: true })
+    .then(client => {
+        console.log(`Connected to ${dbName} Database`)
+        db = client.db(dbName)
+    })
+
+app.set('view engine', 'ejs')
+app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true}))
+app.use(express.json())    
+
 
 
 //like an event listener. Network request.

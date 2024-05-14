@@ -1,2 +1,3 @@
 node_modules
 recipe-api-project.code-workspace
+.env
