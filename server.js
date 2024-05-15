@@ -20,22 +20,23 @@ MongoClient.connect(dbConnectionStr)
         infoCollection = db.collection('recipe-ingredients')
     
 
-        //like an event listener. Network request.
-        app.get('/', (request, response) => {
-        response.sendFile(__dirname + '/index.html')
-        })
-
-        app.get('/api/:recipe', (request, response) => {
-        const recipeSubmit = request.params.recipe.toLowerCase()
-            infoCollection.find({recipeName:recipeSubmit}).toArray()
-            .then(results =>{
-                console.log(results)
-                response.json(results[0])
-            })
-            .catch(error => console.err(error))
-        }) 
+    //like an event listener. Network request.
+    app.get('/', (request, response) => {
+    response.sendFile(__dirname + '/index.html')
     })
-    .catch(error => console.err(error))
+
+    app.get('/api/:recipe', (request, response) => {
+    const recipeSubmit = request.params.recipe.toLowerCase()
+        infoCollection.find({recipeName:recipeSubmit}).toArray()
+        .then(results =>{
+            console.log(results)
+            response.json(results[0])
+        })
+        .catch(error => console.err(error))
+    }) 
+    
+})
+.catch(error => console.err(error))
 
 app.listen(PORT, () =>{
     console.log(`The server is now running on port ${PORT}.`)
